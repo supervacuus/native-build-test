@@ -1,0 +1,38 @@
+name: Build native on Windows
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  download-and-extract:
+    runs-on: windows-latest
+
+    steps:
+      - name: Download sentry-native release zip
+        run: |
+          $url = "https://github.com/getsentry/sentry-native/releases/download/0.7.15/sentry-native.zip"
+          $outputPath = "./sentry-native.zip"
+          Invoke-WebRequest -Uri $url -OutFile $outputPath
+        shell: pwsh
+
+      - name: Extract ZIP file
+        run: |
+          $zipPath = "./sentry-native.zip"
+          $extractPath = "./sentry-native"
+          Expand-Archive -Path $zipPath -DestinationPath $extractPath -Force
+        shell: pwsh
+
+      - name: List extracted files
+        run: Get-ChildItem -Path ./extracted -Recurse
+        shell: pwsh
+
+      - name: Build SDK
+        run: |
+          cd extracted
+          cmake -DBUILD_SHARED_LIBS=OFF -DSENTRY_BACKEND=breakpad -DSENTRY_BUILD_RUNTIMESTATIC=ON -B build
+          cmake --build build --config RelWithDebInfo
+        shell: pwsh
+
