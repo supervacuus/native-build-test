@@ -26,12 +26,12 @@ jobs:
         shell: pwsh
 
       - name: List extracted files
-        run: Get-ChildItem -Path ./extracted -Recurse
+        run: Get-ChildItem -Path ./sentry-native -Recurse
         shell: pwsh
 
       - name: Build SDK
         run: |
-          cd extracted
+          cd sentry-native
           cmake -DBUILD_SHARED_LIBS=OFF -DSENTRY_BACKEND=breakpad -DSENTRY_BUILD_RUNTIMESTATIC=ON -B build
           cmake --build build --config RelWithDebInfo
         shell: pwsh
