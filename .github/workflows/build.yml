@@ -34,5 +34,10 @@ jobs:
           cd sentry-native
           cmake -DBUILD_SHARED_LIBS=OFF -DSENTRY_BACKEND=breakpad -DSENTRY_BUILD_RUNTIMESTATIC=ON -B build
           cmake --build build --config RelWithDebInfo
+          cmake --install build --prefix install --config RelWithDebInfo
         shell: pwsh
-
+      - name: Upload install
+        uses: actions/upload-artifact@v3
+        with:
+          name: sentry-native
+          path: sentry-native/install/
