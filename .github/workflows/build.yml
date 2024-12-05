@@ -36,8 +36,9 @@ jobs:
           cmake --build build --config RelWithDebInfo
           cmake --install build --prefix install --config RelWithDebInfo
         shell: pwsh
+
       - name: Upload install
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: sentry-native
+          name: sentry-native-install
           path: sentry-native/install/
